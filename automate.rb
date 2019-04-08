@@ -11,7 +11,6 @@ def get_child_pid(s)
 end
 
 def parse
-  hash = Hash.new {|h, k| h[k] = []}
   "0
 I am a parent and my PID is 13091
 I am a child and my PID is 13093, my father's PID is:13091
@@ -37,12 +36,12 @@ I am a child and my PID is 13106, my father's PID is:13091
 7
 I am a parent and my PID is 13091
 8
-I am a parent and my PID is 13091".split("\n").each do |s| 
+I am a parent and my PID is 13091".split("\n").reduce(Hash.new {|h, k| h[k] = []}) do |hash, s| 
     if s.start_with?("I am a child") 
       hash[s.split(" ").last.each_char.reduce("") {|n, c| check_number(n, c)}] << get_child_pid(s)
     end
+    hash
   end
-  hash
 end
 
 def details
@@ -52,5 +51,6 @@ def details
     print "#{v}\n" 
   end
 end
+
 
 details
